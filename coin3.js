@@ -33,6 +33,9 @@ function monitorAndCloseTab() {
             setTimeout(() => {
                 console.log("Timer reached 3 seconds. Closing the page.");
                 window.close();  // Close the current tab
+
+                // Refresh the main page with https://www.ebesucher.com/c/ after the tab is closed
+                window.opener.location.reload();  // Refresh the main page
             }, 3000);
 
             clearInterval(checkConditions);  // Stop the interval
@@ -52,6 +55,9 @@ function monitorAndCloseTab() {
             setTimeout(() => {
                 console.log("Timer reached 10 seconds. Closing the page.");
                 window.close();  // Close the current tab
+
+                // Refresh the main page with https://www.ebesucher.com/c/ after the tab is closed
+                window.opener.location.reload();  // Refresh the main page
             }, 10000);
 
             clearInterval(checkConditions);  // Stop the interval
@@ -59,18 +65,6 @@ function monitorAndCloseTab() {
             console.log("Specific elements not found yet...");
         }
     }, 1000);  // Check every second
-}
-
-// Function to refresh the page with https://www.ebesucher.com/c/ after closing the new tab
-function refreshEbesucherCPage() {
-    const currentUrl = window.location.href;
-    const exceptionPattern = /^https:\/\/www\.ebesucher\.com\/c\//;
-
-    // Check if the current URL matches the pattern for the main page
-    if (exceptionPattern.test(currentUrl)) {
-        console.log("Refreshing the page with https://www.ebesucher.com/c/");
-        window.location.reload();  // Refresh the current page
-    }
 }
 
 // Function to detect and click on coin icons, high z-index elements, and specific img elements using a MutationObserver
@@ -89,11 +83,6 @@ function monitorForPopupsAndIcons() {
                         node.getAttribute('width') === '80' &&
                         node.getAttribute('height') === '80';
                     
-                    // Log detected elements for debugging
-                    if (hasHighZIndex || hasSvgIconClass || isSpecificImg) {
-                        console.log('Detected element:', node);
-                    }
-
                     if (hasHighZIndex || hasSvgIconClass || isSpecificImg) {
                         node.click();  // Click the element
                         console.log("Clicked on an element with high z-index, 'svg-icon' class, or specific img attributes.");
@@ -120,9 +109,6 @@ function periodicallyClickSpecificImages() {
 
 // Execute the functions
 monitorCatshadowAdshelper();  // Constantly monitor and click on one catshadow.adshelper
-monitorAndCloseTab();
+monitorAndCloseTab();  // Monitor and close the tab when appropriate
 monitorForPopupsAndIcons();  // Start monitoring for various elements using MutationObserver
 periodicallyClickSpecificImages();  // Periodically click specific images
-
-// Listen for tab closure and refresh the main page
-window.addEventListener('unload', refreshEbesucherCPage);
