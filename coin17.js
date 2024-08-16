@@ -42,12 +42,7 @@ function monitorAndCloseTab() {
         if (aoPointsElement || checkCircleIcon || customClassElement) {
             console.log("Detected specific elements on the page.");
 
-            // Wait for 10 seconds before closing the page
-            setTimeout(() => {
-                console.log("Timer reached 10 seconds. Closing the page.");
-                window.close();  // Close the current tab
-            }, 10000);
-
+           
             clearInterval(checkConditions);  // Stop the interval
         } else {
             console.log("Specific elements not found yet...");
