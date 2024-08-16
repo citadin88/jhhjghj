@@ -1,27 +1,26 @@
-// Function to search and click on elements with the specified class
-function clickCatshadowAdshelper() {
+// Function to search and click on a single element with the specified class
+function clickOneCatshadowAdshelper() {
     const elements = document.querySelectorAll('.catshadow.adshelper');
     if (elements.length > 0) {
-        elements.forEach((element) => {
-            element.click();  // Click the element
-            console.log("Clicked on an element with class 'catshadow adshelper'");
-        });
+        elements[0].click();  // Click the first element
+        console.log("Clicked on one element with class 'catshadow adshelper'");
     } else {
         console.log("No elements with class 'catshadow adshelper' found.");
     }
 }
 
-// Function to monitor the page for a specific URL and elements, and close the page if conditions are met
+// Function to monitor the new tab for a specific URL and elements, and close the tab if conditions are met
 function monitorAndCloseTab() {
-    const targetUrlPattern = /^https:\/\/www\.ebesucher\.com\/advertisement\/view\?surfForUser=protecteur6&code=/;
-    
+    const targetUrlPattern = /^https:\/\/www\.ebesucher\.com\/advertisement\/view\?code=/;
+    const exceptionPattern = /^https:\/\/www\.ebesucher\.com\/c\//;
+
     // Timer to check for specific conditions on the page
     const checkConditions = setInterval(() => {
         const currentUrl = window.location.href;
 
-        // Check if the current URL matches the target pattern
-        if (targetUrlPattern.test(currentUrl)) {
-            console.log("Matched the target URL pattern.");
+        // Check if the current URL matches the target pattern and is not the exception
+        if (targetUrlPattern.test(currentUrl) && !exceptionPattern.test(currentUrl)) {
+            console.log("Matched the target URL pattern and not the exception.");
 
             // Wait for 3 seconds before closing the page
             setTimeout(() => {
@@ -53,6 +52,18 @@ function monitorAndCloseTab() {
             console.log("Specific elements not found yet...");
         }
     }, 1000);  // Check every second
+}
+
+// Function to refresh the page with https://www.ebesucher.com/c/ after closing the new tab
+function refreshEbesucherCPage() {
+    const currentUrl = window.location.href;
+    const exceptionPattern = /^https:\/\/www\.ebesucher\.com\/c\//;
+
+    // Check if the current URL matches the pattern for the main page
+    if (exceptionPattern.test(currentUrl)) {
+        console.log("Refreshing the page with https://www.ebesucher.com/c/");
+        window.location.reload();  // Refresh the current page
+    }
 }
 
 // Function to detect and click on coin icons, high z-index elements, and specific img elements using a MutationObserver
@@ -101,7 +112,10 @@ function periodicallyClickSpecificImages() {
 }
 
 // Execute the functions
-clickCatshadowAdshelper();
+clickOneCatshadowAdshelper();
 monitorAndCloseTab();
 monitorForPopupsAndIcons();  // Start monitoring for various elements using MutationObserver
 periodicallyClickSpecificImages();  // Periodically click specific images
+
+// Listen for tab closure and refresh the main page
+window.addEventListener('unload', refreshEbesucherCPage);
