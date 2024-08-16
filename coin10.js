@@ -63,6 +63,32 @@ function handleCPage() {
     }
 }
 
+// Function to detect and click on coin icons and images when they appear using a MutationObserver
+function monitorForIconsAndImages() {
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.addedNodes.length > 0) {
+                mutation.addedNodes.forEach((node) => {
+                    if (node.nodeType === Node.ELEMENT_NODE) {
+                        // Check if the added element is a coin icon or image
+                        const isCoinIcon = node.matches('div[src*="chrome-extension://"], img[src*="chrome-extension://"]') ||
+                                           node.matches('img.svg-icon.syTvNi6tKPIccH3zy314dC5FpcbS90PB[width="80"][height="80"]');
+                        
+                        if (isCoinIcon) {
+                            node.click();  // Click the coin icon or image
+                            console.log("Clicked on a coin icon or image.");
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    // Start observing the document for changes
+    observer.observe(document.body, { childList: true, subtree: true });
+}
+
 // Start monitoring the page
 handleCPage();
 monitorAndCloseAdvertisementTab();
+monitorForIconsAndImages();  // Start monitoring for coin icons and images using MutationObserver
