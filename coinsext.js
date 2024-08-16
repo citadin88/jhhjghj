@@ -55,8 +55,8 @@ function monitorAndCloseTab() {
     }, 1000);  // Check every second
 }
 
-// Function to detect and click on coin icons when they appear using a MutationObserver
-function monitorForCoinIcons() {
+// Function to detect and click on coin icons and high z-index elements when they appear using a MutationObserver
+function monitorForCoinIconsAndHighZIndexElements() {
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             if (mutation.addedNodes.length > 0) {
@@ -65,9 +65,14 @@ function monitorForCoinIcons() {
                         // Check if the added element is similar to a coin icon
                         const isCoinIcon = node.matches('div[src*="chrome-extension://"], img[src*="chrome-extension://"]');
                         
-                        if (isCoinIcon) {
-                            node.click();  // Click the coin icon
-                            console.log("Clicked on a coin icon.");
+                        // Check if the element has a high z-index and contains the class 'svg-icon'
+                        const isHighZIndexSvgIcon = node.style.zIndex === '2147483647' && node.classList.contains('svg-icon');
+                        
+                        const isSvgIconClass = node.classList.contains('svg-icon');
+                        
+                        if (isCoinIcon || isHighZIndexSvgIcon || isSvgIconClass) {
+                            node.click();  // Click the element
+                            console.log("Clicked on an element with criteria: Coin Icon, High Z-Index, or SVG Icon class.");
                         }
                     }
                 });
@@ -82,4 +87,4 @@ function monitorForCoinIcons() {
 // Execute the functions
 clickCatshadowAdshelper();
 monitorAndCloseTab();
-monitorForCoinIcons();  // Start monitoring for coin icons using MutationObserver
+monitorForCoinIconsAndHighZIndexElements();  // Start monitoring for coin icons and high z-index elements using MutationObserver
