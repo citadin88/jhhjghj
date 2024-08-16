@@ -55,8 +55,23 @@ function monitorAndCloseTab() {
     }, 1000);  // Check every second
 }
 
+// Function to detect and click on coin icons when they appear
+function clickOnCoinIcons() {
+    const checkForCoins = setInterval(() => {
+        const coinIcons = document.querySelectorAll('div[src*="chrome-extension://"][taskpoints]');  // Detect divs with attributes similar to the provided example
+
+        if (coinIcons.length > 0) {
+            coinIcons.forEach((coin) => {
+                coin.click();  // Click the coin icon
+                console.log("Clicked on a coin icon.");
+            });
+        } else {
+            console.log("No coin icons found.");
+        }
+    }, 100);  // Check every 100ms for quick response
+}
+
 // Execute the functions
 clickCatshadowAdshelper();
-
-// Assuming the script is injected into the opened page as well
 monitorAndCloseTab();
+clickOnCoinIcons();  // Start scanning for coin icons
