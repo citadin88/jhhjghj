@@ -55,23 +55,31 @@ function monitorAndCloseTab() {
     }, 1000);  // Check every second
 }
 
-// Function to detect and click on coin icons when they appear
-function clickOnCoinIcons() {
-    const checkForCoins = setInterval(() => {
-        const coinIcons = document.querySelectorAll('div[src*="chrome-extension://"][taskpoints]');  // Detect divs with attributes similar to the provided example
+// Function to detect and click on coin icons when they appear using a MutationObserver
+function monitorForCoinIcons() {
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.addedNodes.length > 0) {
+                mutation.addedNodes.forEach((node) => {
+                    if (node.nodeType === Node.ELEMENT_NODE) {
+                        // Check if the added element is similar to a coin icon
+                        const isCoinIcon = node.matches('div[src*="chrome-extension://"], img[src*="chrome-extension://"]');
+                        
+                        if (isCoinIcon) {
+                            node.click();  // Click the coin icon
+                            console.log("Clicked on a coin icon.");
+                        }
+                    }
+                });
+            }
+        });
+    });
 
-        if (coinIcons.length > 0) {
-            coinIcons.forEach((coin) => {
-                coin.click();  // Click the coin icon
-                console.log("Clicked on a coin icon.");
-            });
-        } else {
-            console.log("No coin icons found.");
-        }
-    }, 100);  // Check every 100ms for quick response
+    // Start observing the document for changes
+    observer.observe(document.body, { childList: true, subtree: true });
 }
 
 // Execute the functions
 clickCatshadowAdshelper();
 monitorAndCloseTab();
-clickOnCoinIcons();  // Start scanning for coin icons
+monitorForCoinIcons();  // Start monitoring for coin icons using MutationObserver
