@@ -1,23 +1,28 @@
-// Function to search and click on a single element with the specified class
-function clickOneCatshadowAdshelper() {
-    const elements = document.querySelectorAll('.catshadow.adshelper');
-    if (elements.length > 0) {
-        elements[0].click();  // Click the first element
-        console.log("Clicked on one element with class 'catshadow adshelper'");
-    } else {
-        console.log("No elements with class 'catshadow adshelper' found. Refreshing the page...");
-        // If no catshadow.adshelper is found, refresh the page
-        if (window.location.href.startsWith('https://www.ebesucher.com/c/')) {
-            window.location.reload();  // Refresh the current tab
+// Function to search and click on a single element with the specified class after a delay
+function delayedClickCatshadowAdshelper() {
+    setTimeout(() => {
+        const elements = document.querySelectorAll('.catshadow.adshelper');
+        if (elements.length > 0) {
+            elements[0].click();  // Click the first element
+            console.log("Clicked on one element with class 'catshadow adshelper'");
+        } else {
+            console.log("No elements with class 'catshadow adshelper' found. Refreshing the page...");
+            // If no catshadow.adshelper is found, refresh the page
+            if (window.location.href.startsWith('https://www.ebesucher.com/c/')) {
+                window.location.reload();  // Refresh the current tab
+            }
         }
-    }
+    }, 4000);  // Wait for 4 seconds after the page has fully loaded
 }
 
-// Function to monitor for catshadow.adshelper elements constantly
+// Function to monitor for catshadow.adshelper elements constantly after page load
 function monitorCatshadowAdshelper() {
-    setInterval(() => {
-        clickOneCatshadowAdshelper();
-    }, 500);  // Check every 500ms
+    window.addEventListener('load', () => {
+        delayedClickCatshadowAdshelper();  // Delay the click action by 4 seconds
+        setInterval(() => {
+            delayedClickCatshadowAdshelper();  // Keep checking every 500ms after the initial delay
+        }, 500);
+    });
 }
 
 // Function to monitor the new tab for a specific URL and close it if conditions are met
@@ -37,10 +42,12 @@ function monitorAndCloseTab() {
                 console.log("Timer reached 3 seconds. Closing the page.");
                 window.close();  // Close the current tab
 
-                // After closing the tab, refresh the main tab if it's the /c/ page
-                if (window.opener && window.opener.location.href.startsWith('https://www.ebesucher.com/c/')) {
-                    window.opener.location.reload();  // Refresh the main page
-                }
+                // After closing the tab, refresh the main tab if it's the /c/ page, after a 4-second delay
+                setTimeout(() => {
+                    if (window.opener && window.opener.location.href.startsWith('https://www.ebesucher.com/c/')) {
+                        window.opener.location.reload();  // Refresh the main page
+                    }
+                }, 4000);
             }, 3000);
 
             clearInterval(checkConditions);  // Stop the interval
@@ -61,10 +68,12 @@ function monitorAndCloseTab() {
                 console.log("Timer reached 10 seconds. Closing the page.");
                 window.close();  // Close the current tab
 
-                // After closing the tab, refresh the main tab if it's the /c/ page
-                if (window.opener && window.opener.location.href.startsWith('https://www.ebesucher.com/c/')) {
-                    window.opener.location.reload();  // Refresh the main page
-                }
+                // After closing the tab, refresh the main tab if it's the /c/ page, after a 4-second delay
+                setTimeout(() => {
+                    if (window.opener && window.opener.location.href.startsWith('https://www.ebesucher.com/c/')) {
+                        window.opener.location.reload();  // Refresh the main page
+                    }
+                }, 2000);
             }, 10000);
 
             clearInterval(checkConditions);  // Stop the interval
@@ -115,7 +124,7 @@ function periodicallyClickSpecificImages() {
 }
 
 // Execute the functions
-monitorCatshadowAdshelper();  // Constantly monitor and click on one catshadow.adshelper
+monitorCatshadowAdshelper();  // Constantly monitor and click on one catshadow.adshelper with delay
 monitorAndCloseTab();  // Monitor and close the tab when appropriate
 monitorForPopupsAndIcons();  // Start monitoring for various elements using MutationObserver
 periodicallyClickSpecificImages();  // Periodically click specific images
