@@ -9,6 +9,13 @@ function clickOneCatshadowAdshelper() {
     }
 }
 
+// Function to monitor for catshadow.adshelper elements constantly
+function monitorCatshadowAdshelper() {
+    setInterval(() => {
+        clickOneCatshadowAdshelper();
+    }, 500);  // Check every 500ms
+}
+
 // Function to monitor the new tab for a specific URL and elements, and close the tab if conditions are met
 function monitorAndCloseTab() {
     const targetUrlPattern = /^https:\/\/www\.ebesucher\.com\/advertisement\/view\?code=/;
@@ -112,7 +119,7 @@ function periodicallyClickSpecificImages() {
 }
 
 // Execute the functions
-clickOneCatshadowAdshelper();
+monitorCatshadowAdshelper();  // Constantly monitor and click on one catshadow.adshelper
 monitorAndCloseTab();
 monitorForPopupsAndIcons();  // Start monitoring for various elements using MutationObserver
 periodicallyClickSpecificImages();  // Periodically click specific images
