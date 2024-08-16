@@ -47,19 +47,13 @@ function handleCPage() {
             }, 4000);  // 4 seconds wait before checking and refreshing
         }, 4000);  // 4 seconds wait after full page load
 
-        // Monitor for the advertisement tab and refresh this page if that tab is closed
-        const observer = new MutationObserver(() => {
-            if (!document.hidden) return;  // Only react if the tab becomes hidden (i.e., a new tab is opened)
-
-            setInterval(() => {
-                if (window.closed) {
-                    console.log("Advertisement tab closed. Refreshing the /c/ page...");
-                    window.location.reload();
-                }
-            }, 1000);  // Check every second
+        // Refresh this page if the advertisement tab gets closed
+        window.addEventListener("focus", function() {
+            if (window.opener && window.opener.closed) {
+                console.log("Advertisement tab closed. Refreshing the /c/ page...");
+                window.location.reload();
+            }
         });
-
-        observer.observe(document.body, { childList: true, subtree: true });
     }
 }
 
