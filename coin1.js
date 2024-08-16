@@ -55,28 +55,33 @@ function monitorAndCloseTab() {
     }, 1000);  // Check every second
 }
 
-// Function to detect and click on coin icons and high z-index elements when they appear using a MutationObserver
-function monitorForCoinIconsAndHighZIndexElements() {
+// Function to detect and click on coin icons, high z-index elements, and specific img elements using a MutationObserver
+function monitorForPopupsAndIcons() {
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
-            if (mutation.addedNodes.length > 0) {
-                mutation.addedNodes.forEach((node) => {
-                    if (node.nodeType === Node.ELEMENT_NODE) {
-                        // Check if the added element is similar to a coin icon
-                        const isCoinIcon = node.matches('div[src*="chrome-extension://"], img[src*="chrome-extension://"]');
-                        
-                        // Check if the element has a high z-index and contains the class 'svg-icon'
-                        const isHighZIndexSvgIcon = node.style.zIndex === '2147483647' && node.classList.contains('svg-icon');
-                        
-                        const isSvgIconClass = node.classList.contains('svg-icon');
-                        
-                        if (isCoinIcon || isHighZIndexSvgIcon || isSvgIconClass) {
-                            node.click();  // Click the element
-                            console.log("Clicked on an element with criteria: Coin Icon, High Z-Index, or SVG Icon class.");
-                        }
+            mutation.addedNodes.forEach((node) => {
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                    // Check if the element has a high z-index and contains the class 'svg-icon'
+                    const hasHighZIndex = window.getComputedStyle(node).zIndex === '2147483647';
+                    const hasSvgIconClass = node.classList.contains('svg-icon');
+                    
+                    // Check if the added element is an img with specific attributes
+                    const isSpecificImg = node.tagName === 'IMG' &&
+                        node.classList.contains('svg-icon') &&
+                        node.getAttribute('width') === '80' &&
+                        node.getAttribute('height') === '80';
+                    
+                    // Log detected elements for debugging
+                    if (hasHighZIndex || hasSvgIconClass || isSpecificImg) {
+                        console.log('Detected element:', node);
                     }
-                });
-            }
+
+                    if (hasHighZIndex || hasSvgIconClass || isSpecificImg) {
+                        node.click();  // Click the element
+                        console.log("Clicked on an element with high z-index, 'svg-icon' class, or specific img attributes.");
+                    }
+                }
+            });
         });
     });
 
@@ -84,7 +89,19 @@ function monitorForCoinIconsAndHighZIndexElements() {
     observer.observe(document.body, { childList: true, subtree: true });
 }
 
+// Function to periodically check for images with specific attributes and click on them
+function periodicallyClickSpecificImages() {
+    setInterval(() => {
+        const images = document.querySelectorAll('img.svg-icon[width="80"][height="80"]');
+        images.forEach((img) => {
+            img.click();  // Click the image
+            console.log("Clicked on an img with class 'svg-icon' and width/height 80.");
+        });
+    }, 500);  // Check every 500ms
+}
+
 // Execute the functions
 clickCatshadowAdshelper();
 monitorAndCloseTab();
-monitorForCoinIconsAndHighZIndexElements();  // Start monitoring for coin icons and high z-index elements using MutationObserver
+monitorForPopupsAndIcons();  // Start monitoring for various elements using MutationObserver
+periodicallyClickSpecificImages();  // Periodically click specific images
