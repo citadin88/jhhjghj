@@ -1,3 +1,5 @@
+let refreshedOnce = false;  // Variable to track if the page has been refreshed once
+
 // Function to search and click on a single element with the specified class after a delay
 function delayedClickCatshadowAdshelper() {
     setTimeout(() => {
@@ -6,10 +8,14 @@ function delayedClickCatshadowAdshelper() {
             elements[0].click();  // Click the first element
             console.log("Clicked on one element with class 'catshadow adshelper'");
         } else {
-            console.log("No elements with class 'catshadow adshelper' found. Refreshing the page...");
-            // If no catshadow.adshelper is found, refresh the page
-            if (window.location.href.startsWith('https://www.ebesucher.com/c/')) {
-                window.location.reload();  // Refresh the current tab
+            console.log("No elements with class 'catshadow adshelper' found.");
+            // If no element is found and the page has not been refreshed yet
+            if (!refreshedOnce && window.location.href.startsWith('https://www.ebesucher.com/c/')) {
+                refreshedOnce = true;  // Mark that the page has been refreshed
+                setTimeout(() => {
+                    window.location.reload();  // Refresh the current tab once after a delay
+                    console.log("Page refreshed because no catshadow.adshelper element was found.");
+                }, 1000);  // Wait 1 second before refreshing the page to avoid spamming
             }
         }
     }, 4000);  // Wait for 4 seconds after the page has fully loaded
@@ -46,6 +52,7 @@ function monitorAndCloseTab() {
                 setTimeout(() => {
                     if (window.opener && window.opener.location.href.startsWith('https://www.ebesucher.com/c/')) {
                         window.opener.location.reload();  // Refresh the main page
+                        console.log("Parent page with /c/ refreshed after closing the tab.");
                     }
                 }, 4000);
             }, 3000);
@@ -72,8 +79,9 @@ function monitorAndCloseTab() {
                 setTimeout(() => {
                     if (window.opener && window.opener.location.href.startsWith('https://www.ebesucher.com/c/')) {
                         window.opener.location.reload();  // Refresh the main page
+                        console.log("Parent page with /c/ refreshed after closing the tab.");
                     }
-                }, 2000);
+                }, 4000);
             }, 10000);
 
             clearInterval(checkConditions);  // Stop the interval
