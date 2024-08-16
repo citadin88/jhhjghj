@@ -16,26 +16,27 @@ function monitorCatshadowAdshelper() {
     }, 500);  // Check every 500ms
 }
 
-// Function to monitor the new tab for a specific URL and elements, and close the tab if conditions are met
+// Function to monitor the new tab for a specific URL and close it if conditions are met
 function monitorAndCloseTab() {
     const targetUrlPattern = /^https:\/\/www\.ebesucher\.com\/advertisement\/view\?code=/;
-    const exceptionPattern = /^https:\/\/www\.ebesucher\.com\/c\//;
 
     // Timer to check for specific conditions on the page
     const checkConditions = setInterval(() => {
         const currentUrl = window.location.href;
 
-        // Check if the current URL matches the target pattern and is not the exception
-        if (targetUrlPattern.test(currentUrl) && !exceptionPattern.test(currentUrl)) {
-            console.log("Matched the target URL pattern and not the exception.");
+        // Check if the current URL matches the target pattern
+        if (targetUrlPattern.test(currentUrl)) {
+            console.log("Matched the target URL pattern.");
 
             // Wait for 3 seconds before closing the page
             setTimeout(() => {
                 console.log("Timer reached 3 seconds. Closing the page.");
                 window.close();  // Close the current tab
 
-                // Refresh the main page with https://www.ebesucher.com/c/ after the tab is closed
-                window.opener.location.reload();  // Refresh the main page
+                // After closing the tab, refresh the main tab
+                if (window.opener && window.opener.location.href.startsWith('https://www.ebesucher.com/c/')) {
+                    window.opener.location.reload();  // Refresh the main page
+                }
             }, 3000);
 
             clearInterval(checkConditions);  // Stop the interval
@@ -56,8 +57,10 @@ function monitorAndCloseTab() {
                 console.log("Timer reached 10 seconds. Closing the page.");
                 window.close();  // Close the current tab
 
-                // Refresh the main page with https://www.ebesucher.com/c/ after the tab is closed
-                window.opener.location.reload();  // Refresh the main page
+                // After closing the tab, refresh the main tab
+                if (window.opener && window.opener.location.href.startsWith('https://www.ebesucher.com/c/')) {
+                    window.opener.location.reload();  // Refresh the main page
+                }
             }, 10000);
 
             clearInterval(checkConditions);  // Stop the interval
