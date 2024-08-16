@@ -5,7 +5,11 @@ function clickOneCatshadowAdshelper() {
         elements[0].click();  // Click the first element
         console.log("Clicked on one element with class 'catshadow adshelper'");
     } else {
-        console.log("No elements with class 'catshadow adshelper' found.");
+        console.log("No elements with class 'catshadow adshelper' found. Refreshing the page...");
+        // If no catshadow.adshelper is found, refresh the page
+        if (window.location.href.startsWith('https://www.ebesucher.com/c/')) {
+            window.location.reload();  // Refresh the current tab
+        }
     }
 }
 
@@ -24,7 +28,7 @@ function monitorAndCloseTab() {
     const checkConditions = setInterval(() => {
         const currentUrl = window.location.href;
 
-        // Check if the current URL matches the target pattern
+        // Check if the current URL matches the target pattern (advertisement/view?code)
         if (targetUrlPattern.test(currentUrl)) {
             console.log("Matched the target URL pattern.");
 
@@ -33,7 +37,7 @@ function monitorAndCloseTab() {
                 console.log("Timer reached 3 seconds. Closing the page.");
                 window.close();  // Close the current tab
 
-                // After closing the tab, refresh the main tab
+                // After closing the tab, refresh the main tab if it's the /c/ page
                 if (window.opener && window.opener.location.href.startsWith('https://www.ebesucher.com/c/')) {
                     window.opener.location.reload();  // Refresh the main page
                 }
@@ -57,7 +61,7 @@ function monitorAndCloseTab() {
                 console.log("Timer reached 10 seconds. Closing the page.");
                 window.close();  // Close the current tab
 
-                // After closing the tab, refresh the main tab
+                // After closing the tab, refresh the main tab if it's the /c/ page
                 if (window.opener && window.opener.location.href.startsWith('https://www.ebesucher.com/c/')) {
                     window.opener.location.reload();  // Refresh the main page
                 }
