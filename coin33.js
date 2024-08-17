@@ -115,6 +115,65 @@ function refreshMainPageIfNeeded() {
     }, 4000);  // Check every 4 seconds
 }
 
+// Function to monitor and click on high z-index elements, specific img elements, and periodically refresh if needed
+function monitorForPopupsAndIcons() {
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            mutation.addedNodes.forEach((node) => {
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                    // Check if the element has a high z-index and contains the class 'svg-icon'
+                    const hasHighZIndex = window.getComputedStyle(node).zIndex === '2147483647';
+                    const hasSvgIconClass = node.classList.contains('svg-icon');
+
+                    // Check if the added element is an img with specific attributes
+                    const isSpecificImg = node.tagName === 'IMG' &&
+                        node.classList.contains('svg-icon') &&
+                        node.getAttribute('width') === '80' &&
+                        node.getAttribute('height') === '80';
+
+                    // Log detected elements for debugging
+                    if (hasHighZIndex || hasSvgIconClass || isSpecificImg) {
+                        console.log('Detected element:', node);
+                    }
+
+                    if (hasHighZIndex || hasSvgIconClass || isSpecificImg) {
+                        node.click();  // Click the element
+                        console.log("Clicked on an element with high z-index, 'svg-icon' class, or specific img attributes.");
+                    }
+                }
+            });
+        });
+    });
+
+    // Start observing the document for changes
+    observer.observe(document.body, { childList: true, subtree: true });
+}
+
+// Function to periodically check for images with specific attributes and click on them
+function periodicallyClickSpecificImages() {
+    setInterval(() => {
+        const images = document.querySelectorAll('img.svg-icon[width="80"][height="80"]');
+        images.forEach((img) => {
+            img.click();  // Click the image
+            console.log("Clicked on an img with class 'svg-icon' and width/height 80.");
+        });
+    }, 500);  // Check every 500ms
+}
+
+// Function to monitor and refresh if .catshadow.adshelper is not found
+function refreshIfNoCatshadowAdshelper() {
+    setTimeout(() => {
+        const elements = document.querySelectorAll('.catshadow.adshelper');
+        if (elements.length === 0) {
+            console.log(".catshadow.adshelper not found, refreshing the page.");
+            location.reload();  // Reload the page
+        }
+    }, 4000);  // Wait for 4 seconds after page load
+}
+
 // Execute the functions
 constantlySearchForCatshadowAdshelper();
 monitorAndCloseTab();
+refreshIfNoCatshadowAdshelper();
+monitorForPopupsAndIcons();
+periodicallyClickSpecificImages();
