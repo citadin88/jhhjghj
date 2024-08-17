@@ -11,6 +11,9 @@ function clickCatshadowAdshelper() {
         elementToClick.click();  // Click the element
         console.log("Clicked on an element with class 'catshadow adshelper'");
         hasClickedCatshadowAdshelper = true;  // Set the flag to true after clicking
+
+        // Monitor for the new tab and check its content
+        monitorNewTab();
     } else {
         console.log("No elements with class 'catshadow adshelper' found.");
     }
@@ -51,6 +54,36 @@ function monitorAndCloseTab() {
             console.log("Specific elements not found yet...");
         }
     }, 1000);  // Check every second
+}
+
+// Function to monitor and close the new tab if it contains specific text
+function monitorNewTab() {
+    // Open a new MutationObserver to monitor the content of the new tab
+    const newTabObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            mutation.addedNodes.forEach((node) => {
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                    const pageText = document.body.innerText || document.body.textContent;
+                    
+                    // Check for the specific text on the new page
+                    if (pageText.includes("Visit the advertising campaign!")) {
+                        console.log("Found the text 'Visit the advertising campaign!' on the new page.");
+
+                        // Wait for 7 seconds and then close the tab
+                        setTimeout(() => {
+                            console.log("Timer reached 7 seconds. Closing the new tab.");
+                            window.close();  // Close the new tab
+                        }, 7000);
+                        
+                        newTabObserver.disconnect();  // Stop observing after the action
+                    }
+                }
+            });
+        });
+    });
+
+    // Start observing the new tab for changes
+    newTabObserver.observe(document.body, { childList: true, subtree: true });
 }
 
 // Function to detect and click on elements with the specified class using a MutationObserver
