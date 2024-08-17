@@ -1,18 +1,27 @@
-// Function to search and click on elements with the specified class
+// Set to keep track of clicked elements
+const clickedElements = new Set();
+
+// Function to search and click on one unclicked element with the specified class
 function clickCatshadowAdshelper() {
     const elements = document.querySelectorAll('.catshadow.adshelper');
-    if (elements.length > 0) {
-        elements[0].click();  // Click the first element only
-        console.log("Clicked on an element with class 'catshadow adshelper'");
-    } else {
-        console.log("No elements with class 'catshadow adshelper' found.");
+    for (const element of elements) {
+        // Generate a unique identifier for the element
+        const elementId = element.getAttribute('id') || element.innerHTML;
+
+        // If the element has not been clicked before, click it
+        if (!clickedElements.has(elementId)) {
+            element.click();  // Click the element
+            clickedElements.add(elementId);  // Mark it as clicked
+            console.log("Clicked on an element with class 'catshadow adshelper'");
+            break;  // Only click one element
+        }
     }
 }
 
 // Function to constantly search for '.catshadow.adshelper'
 function constantlySearchForCatshadowAdshelper() {
     // Use MutationObserver to monitor DOM changes and check for '.catshadow.adshelper'
-    const observer = new MutationObserver((mutations) => {
+    const observer = new MutationObserver(() => {
         clickCatshadowAdshelper();
     });
 
