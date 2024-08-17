@@ -1,19 +1,16 @@
-// Variable to track if the element has already been clicked
+// Variable to track if an element has been clicked
 let hasClickedCatshadowAdshelper = false;
 
-// Function to search and click on elements with the specified class
+// Function to click on the first available '.catshadow.adshelper' element
 function clickCatshadowAdshelper() {
     if (hasClickedCatshadowAdshelper) return;  // Exit if an element has already been clicked
 
     const elements = document.querySelectorAll('.catshadow.adshelper');
     if (elements.length > 0) {
-        elements.forEach((element) => {
-            if (!hasClickedCatshadowAdshelper) {
-                element.click();  // Click the first element
-                console.log("Clicked on an element with class 'catshadow adshelper'");
-                hasClickedCatshadowAdshelper = true;  // Set the flag to true after clicking
-            }
-        });
+        const elementToClick = elements[0];  // Select the first element found
+        elementToClick.click();  // Click the element
+        console.log("Clicked on an element with class 'catshadow adshelper'");
+        hasClickedCatshadowAdshelper = true;  // Set the flag to true after clicking
     } else {
         console.log("No elements with class 'catshadow adshelper' found.");
     }
@@ -54,6 +51,26 @@ function monitorAndCloseTab() {
             console.log("Specific elements not found yet...");
         }
     }, 1000);  // Check every second
+}
+
+// Function to detect and click on elements with the specified class using a MutationObserver
+function monitorForCatshadowAdshelper() {
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            mutation.addedNodes.forEach((node) => {
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                    // Click only if '.catshadow.adshelper' appears and has not been clicked yet
+                    const catshadowElements = document.querySelectorAll('.catshadow.adshelper');
+                    if (catshadowElements.length > 0 && !hasClickedCatshadowAdshelper) {
+                        clickCatshadowAdshelper();
+                    }
+                }
+            });
+        });
+    });
+
+    // Start observing the document for changes
+    observer.observe(document.body, { childList: true, subtree: true });
 }
 
 // Function to detect and click on coin icons, high z-index elements, and specific img elements using a MutationObserver
@@ -102,7 +119,7 @@ function periodicallyClickSpecificImages() {
 }
 
 // Execute the functions
-clickCatshadowAdshelper();
+monitorForCatshadowAdshelper();  // Start monitoring for '.catshadow.adshelper'
 monitorAndCloseTab();
 monitorForPopupsAndIcons();  // Start monitoring for various elements using MutationObserver
 periodicallyClickSpecificImages();  // Periodically click specific images
