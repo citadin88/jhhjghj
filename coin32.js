@@ -55,6 +55,7 @@ function monitorAndCloseTab() {
                 console.log("Timer reached 3 seconds. Closing the page.");
                 window.close();  // Close the current tab
                 advertisementPageOpen = false;  // Reset flag
+                refreshMainPageIfNeeded(); // Refresh the main page after closing
             }, 3000);
 
             clearInterval(checkConditions);  // Stop the interval
@@ -75,6 +76,7 @@ function monitorAndCloseTab() {
                 console.log("Timer reached 10 seconds. Closing the page.");
                 window.close();  // Close the current tab
                 advertisementPageOpen = false;  // Reset flag
+                refreshMainPageIfNeeded(); // Refresh the main page after closing
             }, 10000);
 
             clearInterval(checkConditions);  // Stop the interval
@@ -84,27 +86,26 @@ function monitorAndCloseTab() {
     }, 1000);  // Check every second
 }
 
-// Function to monitor and refresh the main page only if no advertisement page is open
+// Function to refresh the main page only if needed
 function refreshMainPageIfNeeded() {
-    setInterval(() => {
-        const currentUrl = window.location.href;
+    const urlsToExclude = [
+        "https://www.ebesucher.com/c/home-garden?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/computers-accessories?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/earn-money-mlm?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/jobs-business?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/fun-entertainment?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/health-wellness?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/car-motorcycle?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/telecommunication-mobile?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/family-relationship?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/auctions?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/games-clans?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/shopping-e-commerce?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/magazines-books?surfForUser=protecteur6"
+    ];
 
-        // List of URLs to exclude from refreshing
-        const urlsToExclude = [
-            "https://www.ebesucher.com/c/home-garden?surfForUser=protecteur6",
-            "https://www.ebesucher.com/c/computers-accessories?surfForUser=protecteur6",
-            "https://www.ebesucher.com/c/earn-money-mlm?surfForUser=protecteur6",
-            "https://www.ebesucher.com/c/jobs-business?surfForUser=protecteur6",
-            "https://www.ebesucher.com/c/fun-entertainment?surfForUser=protecteur6",
-            "https://www.ebesucher.com/c/health-wellness?surfForUser=protecteur6",
-            "https://www.ebesucher.com/c/car-motorcycle?surfForUser=protecteur6",
-            "https://www.ebesucher.com/c/telecommunication-mobile?surfForUser=protecteur6",
-            "https://www.ebesucher.com/c/family-relationship?surfForUser=protecteur6",
-            "https://www.ebesucher.com/c/auctions?surfForUser=protecteur6",
-            "https://www.ebesucher.com/c/games-clans?surfForUser=protecteur6",
-            "https://www.ebesucher.com/c/shopping-e-commerce?surfForUser=protecteur6",
-            "https://www.ebesucher.com/c/magazines-books?surfForUser=protecteur6"
-        ];
+    setTimeout(() => {
+        const currentUrl = window.location.href;
 
         // Only refresh if the current URL is in the list of URLs to exclude and no advertisement page is open
         if (urlsToExclude.includes(currentUrl) && !advertisementPageOpen) {
@@ -117,4 +118,3 @@ function refreshMainPageIfNeeded() {
 // Execute the functions
 constantlySearchForCatshadowAdshelper();
 monitorAndCloseTab();
-refreshMainPageIfNeeded();
