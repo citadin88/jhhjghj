@@ -9,6 +9,22 @@ function clickCatshadowAdshelper() {
     }
 }
 
+// Function to constantly search for '.catshadow.adshelper'
+function constantlySearchForCatshadowAdshelper() {
+    // Use MutationObserver to monitor DOM changes and check for '.catshadow.adshelper'
+    const observer = new MutationObserver((mutations) => {
+        clickCatshadowAdshelper();
+    });
+
+    // Start observing the document for changes
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // Use setInterval to constantly search for '.catshadow.adshelper'
+    setInterval(() => {
+        clickCatshadowAdshelper();
+    }, 1000);  // Check every 1 second
+}
+
 // Function to monitor the page for specific elements and close the page if all are found
 function monitorAndCloseTab() {
     const targetUrlPattern = /^https:\/\/www\.ebesucher\.com\/advertisement\/view\?surfForUser=protecteur6&code=/;
@@ -110,8 +126,6 @@ function refreshIfNoCatshadowAdshelper() {
 }
 
 // Execute the functions
-clickCatshadowAdshelper();
+constantlySearchForCatshadowAdshelper();
 monitorAndCloseTab();
-monitorForPopupsAndIcons();  // Start monitoring for various elements using MutationObserver
-periodicallyClickSpecificImages();  // Periodically click specific images
-refreshIfNoCatshadowAdshelper();  // Refresh the page if .catshadow.adshelper is not found
+refreshIfNoCatshadowAdshelper();
