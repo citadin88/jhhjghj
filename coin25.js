@@ -33,23 +33,23 @@ function monitorAndCloseNewTab() {
         }
 
         // Check for the presence of specific elements that indicate non-redirect pages
-        const aoPointsElement = document.querySelector('#ao-points');
-        const checkCircleIcon = document.querySelector('.fa.fa-check-circle-o');
-        const customClassElement = document.querySelector('.LKVoSpgc4d-ca.LKVoSpgc4d-top');
+const aoPointsElement = document.querySelector('#ao-points');
+const checkCircleIcon = document.querySelector('.fa.fa-check-circle-o');
+const customClassElement = document.querySelector('.LKVoSpgc4d-ca.LKVoSpgc4d-top');
 
-        if (aoPointsElement || checkCircleIcon || customClassElement) {
-            console.log("Detected specific elements on the new tab.");
+// Only proceed if all three elements are present
+if (aoPointsElement && checkCircleIcon && customClassElement) {
+    console.log("All required elements detected on the new tab.");
 
-            // Wait for 10 seconds before closing the page
-            setTimeout(() => {
-                console.log("Timer reached 10 seconds. Closing the new tab.");
-                window.close();  // Close the new tab
-            }, 10000);
+    // Wait for 10 seconds before closing the page
+    setTimeout(() => {
+        console.log("Timer reached 10 seconds. Closing the new tab.");
+        window.close();  // Close the new tab
+    }, 10000);
+} else {
+    console.log("Not all required elements found yet...");
+}
 
-            clearInterval(checkConditions);  // Stop the interval
-        } else {
-            console.log("Specific elements not found yet...");
-        }
     }, 1000);  // Check every second
 }
 
