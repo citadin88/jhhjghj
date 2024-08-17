@@ -2,18 +2,17 @@
 function clickCatshadowAdshelper() {
     const elements = document.querySelectorAll('.catshadow.adshelper');
     if (elements.length > 0) {
-        elements[0].click();  // Click the first element only
+        elements[0].click();  // Click the first element found
         console.log("Clicked on an element with class 'catshadow adshelper'");
     } else {
         console.log("No elements with class 'catshadow adshelper' found.");
     }
 }
 
-// Function to monitor the page for specific elements and close the page if all are found
+// Function to monitor and close the correct tab
 function monitorAndCloseTab() {
     const targetUrlPattern = /^https:\/\/www\.ebesucher\.com\/advertisement\/view\?surfForUser=protecteur6&code=/;
 
-    // Timer to check for specific conditions on the page
     const checkConditions = setInterval(() => {
         const currentUrl = window.location.href;
 
@@ -32,13 +31,13 @@ function monitorAndCloseTab() {
             console.log("Waiting for the URL to match the target pattern...");
         }
 
-        // Check for the presence of specific elements that indicate non-redirect pages
+        // Check for specific elements that indicate non-redirect pages
         const aoPointsElement = document.querySelector('#ao-points');
         const checkCircleIcon = document.querySelector('.fa.fa-check-circle-o');
         const customClassElement = document.querySelector('.LKVoSpgc4d-ca.LKVoSpgc4d-top');
 
-        if (aoPointsElement && checkCircleIcon && customClassElement) {
-            console.log("All specific elements detected on the page.");
+        if (aoPointsElement || checkCircleIcon || customClassElement) {
+            console.log("Detected specific elements on the page.");
 
             // Wait for 10 seconds before closing the page
             setTimeout(() => {
@@ -48,9 +47,37 @@ function monitorAndCloseTab() {
 
             clearInterval(checkConditions);  // Stop the interval
         } else {
-            console.log("Not all specific elements found yet...");
+            console.log("Specific elements not found yet...");
         }
     }, 1000);  // Check every second
+}
+
+// Function to monitor and close the correct tab if necessary
+function monitorAndReload() {
+    const reloadableUrls = [
+        "https://www.ebesucher.com/c/home-garden?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/computers-accessories?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/earn-money-mlm?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/jobs-business?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/fun-entertainment?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/health-wellness?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/car-motorcycle?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/telecommunication-mobile?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/family-relationship?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/auctions?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/games-clans?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/shopping-e-commerce?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/magazines-books?surfForUser=protecteur6"
+    ];
+
+    setTimeout(() => {
+        const currentUrl = window.location.href;
+
+        if (reloadableUrls.some(url => currentUrl.startsWith(url))) {
+            console.log("Reloading the tab with URL: " + currentUrl);
+            window.location.reload();  // Reload the tab
+        }
+    }, 2000);
 }
 
 // Function to detect and click on coin icons, high z-index elements, and specific img elements using a MutationObserver
@@ -69,11 +96,6 @@ function monitorForPopupsAndIcons() {
                         node.getAttribute('width') === '80' &&
                         node.getAttribute('height') === '80';
 
-                    // Log detected elements for debugging
-                    if (hasHighZIndex || hasSvgIconClass || isSpecificImg) {
-                        console.log('Detected element:', node);
-                    }
-
                     if (hasHighZIndex || hasSvgIconClass || isSpecificImg) {
                         node.click();  // Click the element
                         console.log("Clicked on an element with high z-index, 'svg-icon' class, or specific img attributes.");
@@ -83,7 +105,6 @@ function monitorForPopupsAndIcons() {
         });
     });
 
-    // Start observing the document for changes
     observer.observe(document.body, { childList: true, subtree: true });
 }
 
@@ -98,20 +119,8 @@ function periodicallyClickSpecificImages() {
     }, 500);  // Check every 500ms
 }
 
-// Function to monitor and refresh if .catshadow.adshelper is not found
-function refreshIfNoCatshadowAdshelper() {
-    setTimeout(() => {
-        const elements = document.querySelectorAll('.catshadow.adshelper');
-        if (elements.length === 0) {
-            console.log(".catshadow.adshelper not found, refreshing the page.");
-            location.reload();  // Reload the page
-        }
-    }, 4000);  // Wait for 4 seconds after page load
-}
-
 // Execute the functions
-clickCatshadowAdshelper();
+setInterval(clickCatshadowAdshelper, 1000);  // Constantly search for .catshadow.adshelper every second
 monitorAndCloseTab();
 monitorForPopupsAndIcons();  // Start monitoring for various elements using MutationObserver
 periodicallyClickSpecificImages();  // Periodically click specific images
-refreshIfNoCatshadowAdshelper();  // Refresh the page if .catshadow.adshelper is not found
