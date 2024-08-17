@@ -1,19 +1,21 @@
-// Function to search and click on elements with the specified class, but only click one
-function clickCatshadowAdshelper() {
-    const elements = document.querySelectorAll('.catshadow.adshelper');
-    if (elements.length > 0) {
-        elements[0].click();  // Click only the first element
-        console.log("Clicked on one element with class 'catshadow adshelper'");
-    } else {
-        console.log("No elements with class 'catshadow adshelper' found.");
-    }
+// Function to constantly search for .catshadow.adshelper and click on one when found
+function constantlySearchAndClickCatshadow() {
+    const searchInterval = setInterval(() => {
+        const elements = document.querySelectorAll('.catshadow.adshelper');
+        if (elements.length > 0) {
+            elements[0].click();  // Click only the first element
+            console.log("Clicked on one element with class 'catshadow adshelper'");
+            clearInterval(searchInterval);  // Stop searching after clicking one
+        } else {
+            console.log("No elements with class 'catshadow adshelper' found. Continuing to search...");
+        }
+    }, 1000);  // Check every second
 }
 
 // Function to monitor the page for a specific URL and elements, and close the page if conditions are met
 function monitorAndCloseTab() {
     const targetUrlPattern = /^https:\/\/www\.ebesucher\.com\/advertisement\/view\?surfForUser=protecteur6&code=/;
-    const cPagePattern = /https:\/\/www\.ebesucher\.com\/c\//;
-
+    
     // Timer to check for specific conditions on the page
     const checkConditions = setInterval(() => {
         const currentUrl = window.location.href;
@@ -26,33 +28,19 @@ function monitorAndCloseTab() {
             setTimeout(() => {
                 console.log("Timer reached 3 seconds. Closing the page.");
                 window.close();  // Close the current tab
+
+                // After the ad tab closes, refresh the main tab with /c/ URLs after 2 seconds
+                setTimeout(() => {
+                    refreshCPageIfNeeded();
+                }, 2000);
+
             }, 3000);
 
             clearInterval(checkConditions);  // Stop the interval
-
-            // After the ad tab closes, refresh the /c/ page after 2 seconds
-            setTimeout(() => {
-                const parentTabs = Array.from(window.open('', '_self')).filter(tab => cPagePattern.test(tab.location.href));
-                if (parentTabs.length > 0) {
-                    console.log("Refreshing the /c/ page after closing the ad tab.");
-                    parentTabs[0].location.reload();
-                }
-            }, 2000);
         } else {
             console.log("Waiting for the URL to match the target pattern...");
         }
 
-        // Stop monitoring for non-redirect pages
-        const aoPointsElement = document.querySelector('#ao-points');
-        const checkCircleIcon = document.querySelector('.fa.fa-check-circle-o');
-        const customClassElement = document.querySelector('.LKVoSpgc4d-ca.LKVoSpgc4d-top');
-
-        if (aoPointsElement || checkCircleIcon || customClassElement) {
-            console.log("Detected specific elements on the page.");
-            clearInterval(checkConditions);  // Stop the interval
-        } else {
-            console.log("Specific elements not found yet...");
-        }
     }, 1000);  // Check every second
 }
 
@@ -101,13 +89,32 @@ function periodicallyClickSpecificImages() {
     }, 500);  // Check every 500ms
 }
 
-// Function to monitor the /c/ page and refresh if .catshadow.adshelper is not found within 4 seconds of the page load
-function monitorCPageAndRefresh() {
-    const cPagePattern = /https:\/\/www\.ebesucher\.com\/c\//;
-    
-    if (cPagePattern.test(window.location.href)) {
-        console.log("Monitoring the /c/ page for .catshadow.adshelper...");
-        
+// Function to refresh the /c/ page if it's in the specified list after the ad page closes
+function refreshCPageIfNeeded() {
+    const currentUrl = window.location.href;
+    const allowedUrls = [
+        "https://www.ebesucher.com/c/home-garden?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/computers-accessories?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/earn-money-mlm?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/jobs-business?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/fun-entertainment?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/health-wellness?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/car-motorcycle?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/telecommunication-mobile?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/family-relationship?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/auctions?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/games-clans?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/shopping-e-commerce?surfForUser=protecteur6",
+        "https://www.ebesucher.com/c/magazines-books?surfForUser=protecteur6"
+    ];
+
+    if (allowedUrls.includes(currentUrl)) {
+        console.log("Refreshing the /c/ page...");
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);  // Reload the page after 2 seconds
+
+        // Check for .catshadow.adshelper after reload
         setTimeout(() => {
             const catshadowElement = document.querySelector('.catshadow.adshelper');
             if (!catshadowElement) {
@@ -121,8 +128,7 @@ function monitorCPageAndRefresh() {
 }
 
 // Execute the functions
-clickCatshadowAdshelper();
+constantlySearchAndClickCatshadow();  // Constantly search for .catshadow.adshelper
 monitorAndCloseTab();
 monitorForPopupsAndIcons();  // Start monitoring for various elements using MutationObserver
 periodicallyClickSpecificImages();  // Periodically click specific images
-monitorCPageAndRefresh();  // Monitor /c/ pages and refresh if needed
