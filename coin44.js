@@ -12,6 +12,7 @@ function clickCatshadowAdshelper() {
 // Function to monitor and close the correct tab
 function monitorAndCloseTab() {
     const targetUrlPattern = /^https:\/\/www\.ebesucher\.com\/advertisement\/view\?surfForUser=protecteur6&code=/;
+    const excludeUrlPattern = /\/c\//;  // Pattern to exclude URLs containing '/c/'
 
     const checkConditions = setInterval(() => {
         const currentUrl = window.location.href;
@@ -41,8 +42,13 @@ function monitorAndCloseTab() {
 
             // Wait for 10 seconds before closing the page
             setTimeout(() => {
-                console.log("Timer reached 10 seconds. Closing the page.");
-                window.close();  // Close the current tab
+                // Prevent closing tabs with '/c/' in the URL
+                if (!excludeUrlPattern.test(currentUrl)) {
+                    console.log("Timer reached 10 seconds. Closing the page.");
+                    window.close();  // Close the current tab
+                } else {
+                    console.log("URL contains '/c/'. Not closing the tab.");
+                }
             }, 10000);
 
             clearInterval(checkConditions);  // Stop the interval
