@@ -19,6 +19,48 @@ function clickCatshadowAdshelper() {
     }
 }
 
+// Function to monitor the new tab and close it based on specific conditions
+function monitorNewTab() {
+    // Open a new MutationObserver to monitor the content of the new tab
+    const newTabObserver = new MutationObserver((mutations) => {
+        let hasClassLKVoSpgc4d = false;
+        let hasClassCheckCircle = false;
+        let hasIdAoPoints = false;
+
+        mutations.forEach((mutation) => {
+            mutation.addedNodes.forEach((node) => {
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                    // Check for specific elements in the new tab
+                    if (node.classList.contains('LKVoSpgc4d-ca') && node.classList.contains('LKVoSpgc4d-top')) {
+                        hasClassLKVoSpgc4d = true;
+                    }
+                    if (node.classList.contains('fa') && node.classList.contains('fa-check-circle-o')) {
+                        hasClassCheckCircle = true;
+                    }
+                    if (node.id === 'ao-points') {
+                        hasIdAoPoints = true;
+                    }
+
+                    // Check if all three elements are present
+                    if (hasClassLKVoSpgc4d && hasClassCheckCircle && hasIdAoPoints) {
+                        console.log("All three required elements found. Closing the tab.");
+                        
+                        // Wait for 7 seconds and then close the tab
+                        setTimeout(() => {
+                            window.close();  // Close the new tab
+                        }, 7000);
+
+                        newTabObserver.disconnect();  // Stop observing after the action
+                    }
+                }
+            });
+        });
+    });
+
+    // Start observing the new tab for changes
+    newTabObserver.observe(document.body, { childList: true, subtree: true });
+}
+
 // Function to monitor the page for a specific URL and elements, and close the page if conditions are met
 function monitorAndCloseTab() {
     const targetUrlPattern = /^https:\/\/www\.ebesucher\.com\/advertisement\/view\?surfForUser=protecteur6&code=/;
@@ -54,36 +96,6 @@ function monitorAndCloseTab() {
             console.log("Specific elements not found yet...");
         }
     }, 1000);  // Check every second
-}
-
-// Function to monitor and close the new tab if it contains specific text
-function monitorNewTab() {
-    // Open a new MutationObserver to monitor the content of the new tab
-    const newTabObserver = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            mutation.addedNodes.forEach((node) => {
-                if (node.nodeType === Node.ELEMENT_NODE) {
-                    const pageText = document.body.innerText || document.body.textContent;
-                    
-                    // Check for the specific text on the new page
-                    if (pageText.includes("Visit the advertising campaign!")) {
-                        console.log("Found the text 'Visit the advertising campaign!' on the new page.");
-
-                        // Wait for 7 seconds and then close the tab
-                        setTimeout(() => {
-                            console.log("Timer reached 7 seconds. Closing the new tab.");
-                            window.close();  // Close the new tab
-                        }, 7000);
-                        
-                        newTabObserver.disconnect();  // Stop observing after the action
-                    }
-                }
-            });
-        });
-    });
-
-    // Start observing the new tab for changes
-    newTabObserver.observe(document.body, { childList: true, subtree: true });
 }
 
 // Function to detect and click on elements with the specified class using a MutationObserver
