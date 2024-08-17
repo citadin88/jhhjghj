@@ -1,70 +1,64 @@
-// Variable to track if an element has been clicked
-let hasClickedCatshadowAdshelper = false;
+// Function to monitor the new tab for the presence of specific elements and close it when conditions are met
+function monitorAndCloseOnElements() {
+    const checkInterval = setInterval(() => {
+        const hasClassLKVoSpgc4d = document.querySelector('.LKVoSpgc4d-ca.LKVoSpgc4d-top');
+        const hasClassCheckCircle = document.querySelector('.fa.fa-check-circle-o');
+        const hasIdAoPoints = document.getElementById('ao-points');
+
+        // Check if all three elements are present (Green box with 16 and check mark)
+        if (hasClassLKVoSpgc4d && hasClassCheckCircle && hasIdAoPoints) {
+            console.log("All three required elements found: closing the tab.");
+
+            // Wait for 7 seconds and then close the tab
+            setTimeout(() => {
+                window.close();  // Close the new tab
+            }, 7000);
+
+            clearInterval(checkInterval);  // Stop checking once the tab is being closed
+        } else {
+            console.log("Still searching for the required elements...");
+        }
+    }, 1000);  // Check every second
+}
 
 // Function to click on the first available '.catshadow.adshelper' element
 function clickCatshadowAdshelper() {
-    if (hasClickedCatshadowAdshelper) return;  // Exit if an element has already been clicked
-
     const elements = document.querySelectorAll('.catshadow.adshelper');
     if (elements.length > 0) {
         const elementToClick = elements[0];  // Select the first element found
         elementToClick.click();  // Click the element
         console.log("Clicked on an element with class 'catshadow adshelper'");
-        hasClickedCatshadowAdshelper = true;  // Set the flag to true after clicking
 
-        // Monitor for the new tab and check its content
-        monitorNewTab();
+        // Monitor the new tab for the specific elements
+        monitorAndCloseOnElements();
     } else {
         console.log("No elements with class 'catshadow adshelper' found.");
     }
 }
 
-// Function to monitor the new tab and close it based on specific conditions
-function monitorNewTab() {
-    // Open a new MutationObserver to monitor the content of the new tab
-    const newTabObserver = new MutationObserver((mutations) => {
-        let hasClassLKVoSpgc4d = false;
-        let hasClassCheckCircle = false;
-        let hasIdAoPoints = false;
-
+// Function to monitor the document for the '.catshadow.adshelper' class and click on the first occurrence
+function monitorForCatshadowAdshelper() {
+    const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             mutation.addedNodes.forEach((node) => {
                 if (node.nodeType === Node.ELEMENT_NODE) {
-                    // Check for specific elements in the new tab
-                    if (node.classList.contains('LKVoSpgc4d-ca') && node.classList.contains('LKVoSpgc4d-top')) {
-                        hasClassLKVoSpgc4d = true;
-                    }
-                    if (node.classList.contains('fa') && node.classList.contains('fa-check-circle-o')) {
-                        hasClassCheckCircle = true;
-                    }
-                    if (node.id === 'ao-points') {
-                        hasIdAoPoints = true;
-                    }
-
-                    // Check if all three elements are present
-                    if (hasClassLKVoSpgc4d && hasClassCheckCircle && hasIdAoPoints) {
-                        console.log("All three required elements found. Closing the tab.");
-                        
-                        // Wait for 7 seconds and then close the tab
-                        setTimeout(() => {
-                            window.close();  // Close the new tab
-                        }, 7000);
-
-                        newTabObserver.disconnect();  // Stop observing after the action
+                    const catshadowElements = document.querySelectorAll('.catshadow.adshelper');
+                    if (catshadowElements.length > 0) {
+                        clickCatshadowAdshelper();
                     }
                 }
             });
         });
     });
 
-    // Start observing the new tab for changes
-    newTabObserver.observe(document.body, { childList: true, subtree: true });
+    // Start observing the document for changes
+    observer.observe(document.body, { childList: true, subtree: true });
 }
 
 // Function to monitor the page for a specific URL and elements, and close the page if conditions are met
 function monitorAndCloseTab() {
     const targetUrlPattern = /^https:\/\/www\.ebesucher\.com\/advertisement\/view\?surfForUser=protecteur6&code=/;
-    
+
     // Timer to check for specific conditions on the page
     const checkConditions = setInterval(() => {
         const currentUrl = window.location.href;
@@ -91,31 +85,12 @@ function monitorAndCloseTab() {
 
         if (aoPointsElement || checkCircleIcon || customClassElement) {
             console.log("Detected specific elements on the page.");
+
             clearInterval(checkConditions);  // Stop the interval
         } else {
             console.log("Specific elements not found yet...");
         }
     }, 1000);  // Check every second
-}
-
-// Function to detect and click on elements with the specified class using a MutationObserver
-function monitorForCatshadowAdshelper() {
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            mutation.addedNodes.forEach((node) => {
-                if (node.nodeType === Node.ELEMENT_NODE) {
-                    // Click only if '.catshadow.adshelper' appears and has not been clicked yet
-                    const catshadowElements = document.querySelectorAll('.catshadow.adshelper');
-                    if (catshadowElements.length > 0 && !hasClickedCatshadowAdshelper) {
-                        clickCatshadowAdshelper();
-                    }
-                }
-            });
-        });
-    });
-
-    // Start observing the document for changes
-    observer.observe(document.body, { childList: true, subtree: true });
 }
 
 // Function to detect and click on coin icons, high z-index elements, and specific img elements using a MutationObserver
@@ -127,13 +102,13 @@ function monitorForPopupsAndIcons() {
                     // Check if the element has a high z-index and contains the class 'svg-icon'
                     const hasHighZIndex = window.getComputedStyle(node).zIndex === '2147483647';
                     const hasSvgIconClass = node.classList.contains('svg-icon');
-                    
+
                     // Check if the added element is an img with specific attributes
                     const isSpecificImg = node.tagName === 'IMG' &&
                         node.classList.contains('svg-icon') &&
                         node.getAttribute('width') === '80' &&
                         node.getAttribute('height') === '80';
-                    
+
                     // Log detected elements for debugging
                     if (hasHighZIndex || hasSvgIconClass || isSpecificImg) {
                         console.log('Detected element:', node);
@@ -165,6 +140,6 @@ function periodicallyClickSpecificImages() {
 
 // Execute the functions
 monitorForCatshadowAdshelper();  // Start monitoring for '.catshadow.adshelper'
-monitorAndCloseTab();
+monitorAndCloseTab();  // Monitor for specific URL and conditions to close the tab
 monitorForPopupsAndIcons();  // Start monitoring for various elements using MutationObserver
 periodicallyClickSpecificImages();  // Periodically click specific images
