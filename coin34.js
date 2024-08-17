@@ -1,5 +1,6 @@
 // Flag to track if an advertisement page is open
 let advertisementPageOpen = false;
+let refreshPending = false;
 
 // Set to keep track of clicked elements
 const clickedElements = new Set();
@@ -17,6 +18,7 @@ function clickCatshadowAdshelper() {
             clickedElements.add(elementId);  // Mark it as clicked
             console.log("Clicked on an element with class 'catshadow adshelper'");
             advertisementPageOpen = true;  // Set flag to true
+            refreshPending = false; // Reset refresh pending flag
             break;  // Only click one element
         }
     }
@@ -55,7 +57,7 @@ function monitorAndCloseTab() {
                 console.log("Timer reached 3 seconds. Closing the page.");
                 window.close();  // Close the current tab
                 advertisementPageOpen = false;  // Reset flag
-                refreshMainPageIfNeeded(); // Refresh the main page after closing
+                refreshPending = true; // Set refresh pending flag
             }, 3000);
 
             clearInterval(checkConditions);  // Stop the interval
@@ -76,7 +78,7 @@ function monitorAndCloseTab() {
                 console.log("Timer reached 10 seconds. Closing the page.");
                 window.close();  // Close the current tab
                 advertisementPageOpen = false;  // Reset flag
-                refreshMainPageIfNeeded(); // Refresh the main page after closing
+                refreshPending = true; // Set refresh pending flag
             }, 10000);
 
             clearInterval(checkConditions);  // Stop the interval
@@ -88,29 +90,30 @@ function monitorAndCloseTab() {
 
 // Function to refresh the main page only if needed
 function refreshMainPageIfNeeded() {
-    const urlsToExclude = [
-        "https://www.ebesucher.com/c/home-garden?surfForUser=protecteur6",
-        "https://www.ebesucher.com/c/computers-accessories?surfForUser=protecteur6",
-        "https://www.ebesucher.com/c/earn-money-mlm?surfForUser=protecteur6",
-        "https://www.ebesucher.com/c/jobs-business?surfForUser=protecteur6",
-        "https://www.ebesucher.com/c/fun-entertainment?surfForUser=protecteur6",
-        "https://www.ebesucher.com/c/health-wellness?surfForUser=protecteur6",
-        "https://www.ebesucher.com/c/car-motorcycle?surfForUser=protecteur6",
-        "https://www.ebesucher.com/c/telecommunication-mobile?surfForUser=protecteur6",
-        "https://www.ebesucher.com/c/family-relationship?surfForUser=protecteur6",
-        "https://www.ebesucher.com/c/auctions?surfForUser=protecteur6",
-        "https://www.ebesucher.com/c/games-clans?surfForUser=protecteur6",
-        "https://www.ebesucher.com/c/shopping-e-commerce?surfForUser=protecteur6",
-        "https://www.ebesucher.com/c/magazines-books?surfForUser=protecteur6"
-    ];
-
     setTimeout(() => {
+        const urlsToExclude = [
+            "https://www.ebesucher.com/c/home-garden?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/computers-accessories?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/earn-money-mlm?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/jobs-business?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/fun-entertainment?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/health-wellness?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/car-motorcycle?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/telecommunication-mobile?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/family-relationship?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/auctions?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/games-clans?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/shopping-e-commerce?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/magazines-books?surfForUser=protecteur6"
+        ];
+
         const currentUrl = window.location.href;
 
         // Only refresh if the current URL is in the list of URLs to exclude and no advertisement page is open
-        if (urlsToExclude.includes(currentUrl) && !advertisementPageOpen) {
+        if (urlsToExclude.includes(currentUrl) && refreshPending) {
             console.log("Refreshing the main page.");
             location.reload();  // Reload the page
+            refreshPending = false; // Reset refresh pending flag
         }
     }, 4000);  // Check every 4 seconds
 }
@@ -164,7 +167,7 @@ function periodicallyClickSpecificImages() {
 function refreshIfNoCatshadowAdshelper() {
     setTimeout(() => {
         const elements = document.querySelectorAll('.catshadow.adshelper');
-        if (elements.length === 0) {
+        if (elements.length === 0 && !advertisementPageOpen) {
             console.log(".catshadow.adshelper not found, refreshing the page.");
             location.reload();  // Reload the page
         }
