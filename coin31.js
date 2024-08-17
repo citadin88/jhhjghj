@@ -84,55 +84,9 @@ function monitorAndCloseTab() {
     }, 1000);  // Check every second
 }
 
-// Function to detect and click on coin icons, high z-index elements, and specific img elements using a MutationObserver
-function monitorForPopupsAndIcons() {
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            mutation.addedNodes.forEach((node) => {
-                if (node.nodeType === Node.ELEMENT_NODE) {
-                    // Check if the element has a high z-index and contains the class 'svg-icon'
-                    const hasHighZIndex = window.getComputedStyle(node).zIndex === '2147483647';
-                    const hasSvgIconClass = node.classList.contains('svg-icon');
-
-                    // Check if the added element is an img with specific attributes
-                    const isSpecificImg = node.tagName === 'IMG' &&
-                        node.classList.contains('svg-icon') &&
-                        node.getAttribute('width') === '80' &&
-                        node.getAttribute('height') === '80';
-
-                    // Log detected elements for debugging
-                    if (hasHighZIndex || hasSvgIconClass || isSpecificImg) {
-                        console.log('Detected element:', node);
-                    }
-
-                    if (hasHighZIndex || hasSvgIconClass || isSpecificImg) {
-                        node.click();  // Click the element
-                        console.log("Clicked on an element with high z-index, 'svg-icon' class, or specific img attributes.");
-                    }
-                }
-            });
-        });
-    });
-
-    // Start observing the document for changes
-    observer.observe(document.body, { childList: true, subtree: true });
-}
-
-// Function to periodically check for images with specific attributes and click on them
-function periodicallyClickSpecificImages() {
+// Function to monitor and refresh the main page only if no advertisement page is open
+function refreshMainPageIfNeeded() {
     setInterval(() => {
-        const images = document.querySelectorAll('img.svg-icon[width="80"][height="80"]');
-        images.forEach((img) => {
-            img.click();  // Click the image
-            console.log("Clicked on an img with class 'svg-icon' and width/height 80.");
-        });
-    }, 500);  // Check every 500ms
-}
-
-// Function to monitor and refresh if .catshadow.adshelper is not found
-function refreshIfNoCatshadowAdshelper() {
-    setInterval(() => {
-        const elements = document.querySelectorAll('.catshadow.adshelper');
         const currentUrl = window.location.href;
 
         // List of URLs to exclude from refreshing
@@ -152,9 +106,9 @@ function refreshIfNoCatshadowAdshelper() {
             "https://www.ebesucher.com/c/magazines-books?surfForUser=protecteur6"
         ];
 
-        // Only refresh if the current URL is in the list of URLs to exclude
-        if (elements.length === 0 && urlsToExclude.includes(currentUrl) && !advertisementPageOpen) {
-            console.log(".catshadow.adshelper not found and the advertisement page is closed, refreshing the page.");
+        // Only refresh if the current URL is in the list of URLs to exclude and no advertisement page is open
+        if (urlsToExclude.includes(currentUrl) && !advertisementPageOpen) {
+            console.log("Refreshing the main page.");
             location.reload();  // Reload the page
         }
     }, 4000);  // Check every 4 seconds
@@ -163,4 +117,4 @@ function refreshIfNoCatshadowAdshelper() {
 // Execute the functions
 constantlySearchForCatshadowAdshelper();
 monitorAndCloseTab();
-refreshIfNoCatshadowAdshelper();
+refreshMainPageIfNeeded();
