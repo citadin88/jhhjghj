@@ -1,10 +1,18 @@
+// Variable to track if the element has already been clicked
+let hasClickedCatshadowAdshelper = false;
+
 // Function to search and click on elements with the specified class
 function clickCatshadowAdshelper() {
+    if (hasClickedCatshadowAdshelper) return;  // Exit if an element has already been clicked
+
     const elements = document.querySelectorAll('.catshadow.adshelper');
     if (elements.length > 0) {
         elements.forEach((element) => {
-            element.click();  // Click the element
-            console.log("Clicked on an element with class 'catshadow adshelper'");
+            if (!hasClickedCatshadowAdshelper) {
+                element.click();  // Click the first element
+                console.log("Clicked on an element with class 'catshadow adshelper'");
+                hasClickedCatshadowAdshelper = true;  // Set the flag to true after clicking
+            }
         });
     } else {
         console.log("No elements with class 'catshadow adshelper' found.");
@@ -41,8 +49,6 @@ function monitorAndCloseTab() {
 
         if (aoPointsElement || checkCircleIcon || customClassElement) {
             console.log("Detected specific elements on the page.");
-
-           
             clearInterval(checkConditions);  // Stop the interval
         } else {
             console.log("Specific elements not found yet...");
