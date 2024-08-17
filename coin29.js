@@ -125,13 +125,33 @@ function periodicallyClickSpecificImages() {
 
 // Function to monitor and refresh if .catshadow.adshelper is not found
 function refreshIfNoCatshadowAdshelper() {
-    setTimeout(() => {
+    setInterval(() => {
         const elements = document.querySelectorAll('.catshadow.adshelper');
-        if (elements.length === 0) {
+        const currentUrl = window.location.href;
+
+        // Check if the URL is one of the specified patterns before refreshing
+        const urlsToExclude = [
+            "https://www.ebesucher.com/c/home-garden?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/computers-accessories?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/earn-money-mlm?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/jobs-business?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/fun-entertainment?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/health-wellness?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/car-motorcycle?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/telecommunication-mobile?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/family-relationship?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/auctions?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/games-clans?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/shopping-e-commerce?surfForUser=protecteur6",
+            "https://www.ebesucher.com/c/magazines-books?surfForUser=protecteur6"
+        ];
+
+        // Only refresh if the current URL is not in the list of excluded URLs
+        if (elements.length === 0 && !urlsToExclude.includes(currentUrl)) {
             console.log(".catshadow.adshelper not found, refreshing the page.");
             location.reload();  // Reload the page
         }
-    }, 4000);  // Wait for 4 seconds after page load
+    }, 4000);  // Check every 4 seconds
 }
 
 // Execute the functions
