@@ -111,11 +111,11 @@ function refreshMainTabAfterAd() {
             setTimeout(() => {
                 console.log("Refreshing the main tab...");
                 location.reload();  // Reload the main tab
-            }, 2000);  // Wait for 2 seconds before reloading
+            }, 4000);  // Wait for 2 seconds before reloading
         } else {
             console.log("Current tab URL does not match any main tab patterns.");
         }
-    }, 2000);  // Wait for 2 seconds after the ad tab is closed
+    }, 4000);  // Wait for 2 seconds after the ad tab is closed
 }
 
 // Execute the functions
