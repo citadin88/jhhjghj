@@ -1,3 +1,6 @@
+// Flag to track if an advertisement page is open
+let advertisementPageOpen = false;
+
 // Set to keep track of clicked elements
 const clickedElements = new Set();
 
@@ -13,6 +16,7 @@ function clickCatshadowAdshelper() {
             element.click();  // Click the element
             clickedElements.add(elementId);  // Mark it as clicked
             console.log("Clicked on an element with class 'catshadow adshelper'");
+            advertisementPageOpen = true;  // Set flag to true
             break;  // Only click one element
         }
     }
@@ -50,6 +54,7 @@ function monitorAndCloseTab() {
             setTimeout(() => {
                 console.log("Timer reached 3 seconds. Closing the page.");
                 window.close();  // Close the current tab
+                advertisementPageOpen = false;  // Reset flag
             }, 3000);
 
             clearInterval(checkConditions);  // Stop the interval
@@ -69,6 +74,7 @@ function monitorAndCloseTab() {
             setTimeout(() => {
                 console.log("Timer reached 10 seconds. Closing the page.");
                 window.close();  // Close the current tab
+                advertisementPageOpen = false;  // Reset flag
             }, 10000);
 
             clearInterval(checkConditions);  // Stop the interval
@@ -129,7 +135,7 @@ function refreshIfNoCatshadowAdshelper() {
         const elements = document.querySelectorAll('.catshadow.adshelper');
         const currentUrl = window.location.href;
 
-        // Check if the URL is one of the specified patterns before refreshing
+        // List of URLs to exclude from refreshing
         const urlsToExclude = [
             "https://www.ebesucher.com/c/home-garden?surfForUser=protecteur6",
             "https://www.ebesucher.com/c/computers-accessories?surfForUser=protecteur6",
@@ -146,9 +152,9 @@ function refreshIfNoCatshadowAdshelper() {
             "https://www.ebesucher.com/c/magazines-books?surfForUser=protecteur6"
         ];
 
-        // Only refresh if the current URL is not in the list of excluded URLs
-        if (elements.length === 0 && !urlsToExclude.includes(currentUrl)) {
-            console.log(".catshadow.adshelper not found, refreshing the page.");
+        // Only refresh if the current URL is in the list of URLs to exclude
+        if (elements.length === 0 && urlsToExclude.includes(currentUrl) && !advertisementPageOpen) {
+            console.log(".catshadow.adshelper not found and the advertisement page is closed, refreshing the page.");
             location.reload();  // Reload the page
         }
     }, 4000);  // Check every 4 seconds
