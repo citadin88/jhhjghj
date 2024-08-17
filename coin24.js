@@ -9,8 +9,8 @@ function clickCatshadowAdshelper() {
     }
 }
 
-// Function to monitor the page for a specific URL and elements, and close the page if conditions are met
-function monitorAndCloseTab() {
+// Function to monitor the page for a specific URL and elements, and close the new tab if conditions are met
+function monitorAndCloseNewTab() {
     const targetUrlPattern = /^https:\/\/www\.ebesucher\.com\/advertisement\/view\?surfForUser=protecteur6&code=/;
 
     // Timer to check for specific conditions on the page
@@ -23,8 +23,8 @@ function monitorAndCloseTab() {
 
             // Wait for 3 seconds before closing the page
             setTimeout(() => {
-                console.log("Timer reached 3 seconds. Closing the page.");
-                window.close();  // Close the current tab
+                console.log("Timer reached 3 seconds. Closing the new tab.");
+                window.close();  // Close the new tab
             }, 3000);
 
             clearInterval(checkConditions);  // Stop the interval
@@ -38,12 +38,12 @@ function monitorAndCloseTab() {
         const customClassElement = document.querySelector('.LKVoSpgc4d-ca.LKVoSpgc4d-top');
 
         if (aoPointsElement || checkCircleIcon || customClassElement) {
-            console.log("Detected specific elements on the page.");
+            console.log("Detected specific elements on the new tab.");
 
             // Wait for 10 seconds before closing the page
             setTimeout(() => {
-                console.log("Timer reached 10 seconds. Closing the page.");
-                window.close();  // Close the current tab
+                console.log("Timer reached 10 seconds. Closing the new tab.");
+                window.close();  // Close the new tab
             }, 10000);
 
             clearInterval(checkConditions);  // Stop the interval
@@ -129,7 +129,7 @@ function reloadAfterTabClose() {
 // Execute the functions
 clickCatshadowAdshelper();
 setInterval(clickCatshadowAdshelper, 1000);  // Monitor for .catshadow.adshelper every second
-monitorAndCloseTab();
+monitorAndCloseNewTab();  // Monitor the new tab and close it if conditions are met
 monitorForPopupsAndIcons();  // Start monitoring for various elements using MutationObserver
 periodicallyClickSpecificImages();  // Periodically click specific images
 reloadAfterTabClose();  // Reload the parent tab after the ad tab closes
