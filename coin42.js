@@ -1,61 +1,15 @@
-// Function to monitor the new tab for the presence of specific elements and close it when conditions are met
-function monitorAndCloseOnElements() {
-    const checkInterval = setInterval(() => {
-        const hasClassLKVoSpgc4d = document.querySelector('.LKVoSpgc4d-ca.LKVoSpgc4d-top');
-        const hasClassCheckCircle = document.querySelector('.fa.fa-check-circle-o');
-        const hasIdAoPoints = document.getElementById('ao-points');
-
-        // Check if all three elements are present (Green box with 16 and check mark)
-        if (hasClassLKVoSpgc4d && hasClassCheckCircle && hasIdAoPoints) {
-            console.log("All three required elements found: closing the tab.");
-
-            // Wait for 7 seconds and then close the tab
-            setTimeout(() => {
-                window.close();  // Close the new tab
-            }, 7000);
-
-            clearInterval(checkInterval);  // Stop checking once the tab is being closed
-        } else {
-            console.log("Still searching for the required elements...");
-        }
-    }, 1000);  // Check every second
-}
-
-// Function to click on the first available '.catshadow.adshelper' element
+// Function to search and click on elements with the specified class
 function clickCatshadowAdshelper() {
     const elements = document.querySelectorAll('.catshadow.adshelper');
     if (elements.length > 0) {
-        const elementToClick = elements[0];  // Select the first element found
-        elementToClick.click();  // Click the element
+        elements[0].click();  // Click the first element only
         console.log("Clicked on an element with class 'catshadow adshelper'");
-
-        // Monitor the new tab for the specific elements
-        monitorAndCloseOnElements();
     } else {
         console.log("No elements with class 'catshadow adshelper' found.");
     }
 }
 
-// Function to monitor the document for the '.catshadow.adshelper' class and click on the first occurrence
-function monitorForCatshadowAdshelper() {
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            mutation.addedNodes.forEach((node) => {
-                if (node.nodeType === Node.ELEMENT_NODE) {
-                    const catshadowElements = document.querySelectorAll('.catshadow.adshelper');
-                    if (catshadowElements.length > 0) {
-                        clickCatshadowAdshelper();
-                    }
-                }
-            });
-        });
-    });
-
-    // Start observing the document for changes
-    observer.observe(document.body, { childList: true, subtree: true });
-}
-
-// Function to monitor the page for a specific URL and elements, and close the page if conditions are met
+// Function to monitor the page for specific elements and close the page if all are found
 function monitorAndCloseTab() {
     const targetUrlPattern = /^https:\/\/www\.ebesucher\.com\/advertisement\/view\?surfForUser=protecteur6&code=/;
 
@@ -83,12 +37,18 @@ function monitorAndCloseTab() {
         const checkCircleIcon = document.querySelector('.fa.fa-check-circle-o');
         const customClassElement = document.querySelector('.LKVoSpgc4d-ca.LKVoSpgc4d-top');
 
-        if (aoPointsElement || checkCircleIcon || customClassElement) {
-            console.log("Detected specific elements on the page.");
+        if (aoPointsElement && checkCircleIcon && customClassElement) {
+            console.log("All specific elements detected on the page.");
+
+            // Wait for 10 seconds before closing the page
+            setTimeout(() => {
+                console.log("Timer reached 10 seconds. Closing the page.");
+                window.close();  // Close the current tab
+            }, 10000);
 
             clearInterval(checkConditions);  // Stop the interval
         } else {
-            console.log("Specific elements not found yet...");
+            console.log("Not all specific elements found yet...");
         }
     }, 1000);  // Check every second
 }
@@ -138,8 +98,20 @@ function periodicallyClickSpecificImages() {
     }, 500);  // Check every 500ms
 }
 
+// Function to monitor and refresh if .catshadow.adshelper is not found
+function refreshIfNoCatshadowAdshelper() {
+    setTimeout(() => {
+        const elements = document.querySelectorAll('.catshadow.adshelper');
+        if (elements.length === 0) {
+            console.log(".catshadow.adshelper not found, refreshing the page.");
+            location.reload();  // Reload the page
+        }
+    }, 4000);  // Wait for 4 seconds after page load
+}
+
 // Execute the functions
-monitorForCatshadowAdshelper();  // Start monitoring for '.catshadow.adshelper'
-monitorAndCloseTab();  // Monitor for specific URL and conditions to close the tab
+clickCatshadowAdshelper();
+monitorAndCloseTab();
 monitorForPopupsAndIcons();  // Start monitoring for various elements using MutationObserver
 periodicallyClickSpecificImages();  // Periodically click specific images
+refreshIfNoCatshadowAdshelper();  // Refresh the page if .catshadow.adshelper is not found
