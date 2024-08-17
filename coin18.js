@@ -1,11 +1,9 @@
-// Function to search and click on elements with the specified class
+// Function to search and click on elements with the specified class, but only click one
 function clickCatshadowAdshelper() {
     const elements = document.querySelectorAll('.catshadow.adshelper');
     if (elements.length > 0) {
-        elements.forEach((element) => {
-            element.click();  // Click the element
-            console.log("Clicked on an element with class 'catshadow adshelper'");
-        });
+        elements[0].click();  // Click only the first element
+        console.log("Clicked on one element with class 'catshadow adshelper'");
     } else {
         console.log("No elements with class 'catshadow adshelper' found.");
     }
@@ -14,7 +12,8 @@ function clickCatshadowAdshelper() {
 // Function to monitor the page for a specific URL and elements, and close the page if conditions are met
 function monitorAndCloseTab() {
     const targetUrlPattern = /^https:\/\/www\.ebesucher\.com\/advertisement\/view\?surfForUser=protecteur6&code=/;
-    
+    const cPagePattern = /https:\/\/www\.ebesucher\.com\/c\//;
+
     // Timer to check for specific conditions on the page
     const checkConditions = setInterval(() => {
         const currentUrl = window.location.href;
@@ -30,19 +29,26 @@ function monitorAndCloseTab() {
             }, 3000);
 
             clearInterval(checkConditions);  // Stop the interval
+
+            // After the ad tab closes, refresh the /c/ page after 2 seconds
+            setTimeout(() => {
+                const parentTabs = Array.from(window.open('', '_self')).filter(tab => cPagePattern.test(tab.location.href));
+                if (parentTabs.length > 0) {
+                    console.log("Refreshing the /c/ page after closing the ad tab.");
+                    parentTabs[0].location.reload();
+                }
+            }, 2000);
         } else {
             console.log("Waiting for the URL to match the target pattern...");
         }
 
-        // Check for the presence of specific elements that indicate non-redirect pages
+        // Stop monitoring for non-redirect pages
         const aoPointsElement = document.querySelector('#ao-points');
         const checkCircleIcon = document.querySelector('.fa.fa-check-circle-o');
         const customClassElement = document.querySelector('.LKVoSpgc4d-ca.LKVoSpgc4d-top');
 
         if (aoPointsElement || checkCircleIcon || customClassElement) {
             console.log("Detected specific elements on the page.");
-
-           
             clearInterval(checkConditions);  // Stop the interval
         } else {
             console.log("Specific elements not found yet...");
@@ -95,8 +101,28 @@ function periodicallyClickSpecificImages() {
     }, 500);  // Check every 500ms
 }
 
+// Function to monitor the /c/ page and refresh if .catshadow.adshelper is not found within 4 seconds of the page load
+function monitorCPageAndRefresh() {
+    const cPagePattern = /https:\/\/www\.ebesucher\.com\/c\//;
+    
+    if (cPagePattern.test(window.location.href)) {
+        console.log("Monitoring the /c/ page for .catshadow.adshelper...");
+        
+        setTimeout(() => {
+            const catshadowElement = document.querySelector('.catshadow.adshelper');
+            if (!catshadowElement) {
+                console.log(".catshadow.adshelper not found, refreshing the page.");
+                window.location.reload();
+            } else {
+                console.log(".catshadow.adshelper found, no refresh needed.");
+            }
+        }, 4000);  // Wait for 4 seconds before checking
+    }
+}
+
 // Execute the functions
 clickCatshadowAdshelper();
 monitorAndCloseTab();
 monitorForPopupsAndIcons();  // Start monitoring for various elements using MutationObserver
 periodicallyClickSpecificImages();  // Periodically click specific images
+monitorCPageAndRefresh();  // Monitor /c/ pages and refresh if needed
