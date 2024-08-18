@@ -2,18 +2,9 @@
 if (!localStorage.tabCount) {
     localStorage.tabCount = 0;
 }
-
 localStorage.tabCount = parseInt(localStorage.tabCount) + 1;
 
-// Check if there's only one tab
-if (parseInt(localStorage.tabCount) === 1) {
-    console.log('Only one tab open');
-    setTimeout(() => {
-        // Perform your action after 3 seconds
-        checkPageAndRefresh();
-    }, 10000); // Wait for 10 seconds
-}
-
+// Function to check the page content and refresh if conditions are met
 function checkPageAndRefresh() {
     var metaOgUrl = document.querySelector('meta[property="og:url"][content="https://www.ebesucher.com"]');
     var metaOgType = document.querySelector('meta[property="og:type"][content="website"]');
@@ -35,6 +26,20 @@ function checkPageAndRefresh() {
     }
 }
 
+// Function to monitor the number of tabs
+function monitorTabs() {
+    setInterval(() => {
+        if (parseInt(localStorage.tabCount) <= 1) {
+            // If this is the only tab running the script
+            setTimeout(() => {
+                checkPageAndRefresh();
+            }, 10000); // Start a 10-second timer before refreshing
+        }
+    }, 10000); // Check every 10 seconds
+}
+
+// Start the monitoring function
+monitorTabs();
 
 // Decrease the counter when the tab is closed or refreshed
 window.addEventListener('beforeunload', () => {
