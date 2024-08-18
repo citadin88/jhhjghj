@@ -33,7 +33,7 @@ function monitorTabs() {
             // If this is the only tab running the script
             setTimeout(() => {
                 checkPageAndRefresh();
-            }, 10000); // Start a 10-second timer before refreshing
+            }, 30000); // Start a 10-second timer before refreshing
         }
     }, 10000); // Check every 10 seconds
 }
