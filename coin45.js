@@ -49,7 +49,7 @@ function monitorAndCloseTab() {
                 } else {
                     console.log("URL contains '/c/'. Not closing the tab.");
                 }
-            }, 10000);
+            }, 16000);
 
             clearInterval(checkConditions);  // Stop the interval
         } else {
