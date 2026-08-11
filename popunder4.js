@@ -329,6 +329,8 @@
               var e = !0x1;
               if ("which" in V ? e = 0x3 == V.which : "button" in V && (e = 0x2 == V.button), e) return !0x1;
             }
+            // REMOVED: if ("isTrusted" in V && !V.isTrusted) return !0x1;
+            // REMOVED: if (navigator.userActivation && !navigator.userActivation.isActive) return !0x1;
             if (this.minipopmon) {
               var l = this._getMinipopStatus(this.minipopmontw);
               if ("success" == l) {
@@ -338,7 +340,7 @@
             var b = this.checkStackEmpty();
             if (b && this.settings.prepop && !this._prepopReady() && (this.settings.prepop = !0x1, this._prepopOpen(this.settings.crtimeout)), this.catchalldiv && b && this._removeCatchAllDiv(), this.checkIgnore(V)) return !0x1;
             if (b) return !0x1;
-            if (this.settings.prepop = !0x1, navigator.userActivation && !navigator.userActivation.isActive) return !0x1;
+            // REMOVED: if (this.settings.prepop = !0x1, navigator.userActivation && !navigator.userActivation.isActive) return !0x1;
             var I = this.checkStack();
             if (!I) return !0x1;
             this.minipopmon = !0x1;
@@ -356,10 +358,7 @@
             this.checkStackEmpty() && this.catchalldiv && this._removeCatchAllDiv(), this.settings.showLink && this._syncLink();
           },
           '_userActivationHandler': function() {
-            var m = J;
-            navigator.userActivation.isActive && this._onExecute({
-              'type': m(0x1cc)
-            });
+            // REMOVED: relies on userActivation
           },
           '_onMouseDownHandler': function(V) {
             var e = V.target || V.srcElement || V.toElement;
@@ -431,7 +430,9 @@
             } .bind(this), 0x1f4)));
           },
           'init': function(V) {
-            this.cap = this._getBrowserCapabilities(), this.urls = [], this.ignores = [], this.settings = {}, this.settings.prepop = !!V.prepop && this.cap.popunder, this.settings.crtimeout = V.crtimeout || 0xea60, this.settings.targetblankhandler = V.targetblankhandler || !0x0, this.settings.onbeforeopen = V.onbeforeopen, this.settings.catchalldivoff = V.catchalldiv || !navigator.userActivation, this.settings.delaySeconds = V.delaySeconds || 0x0, this.settings.frequencyCap = V.frequencyCap || 0x1, this.settings.frequencyCapHours = V.frequencyCapHours || 0x18, this.settings.showLink = !!V.showLink, this.minipopmon = !0x1;
+            this.cap = this._getBrowserCapabilities(), this.urls = [], this.ignores = [], this.settings = {}, this.settings.prepop = !!V.prepop && this.cap.popunder, this.settings.crtimeout = V.crtimeout || 0xea60, this.settings.targetblankhandler = V.targetblankhandler || !0x0, this.settings.onbeforeopen = V.onbeforeopen,
+            this.settings.catchalldivoff = V.catchalldiv || !1, // removed userActivation dependency
+            this.settings.delaySeconds = V.delaySeconds || 0x0, this.settings.frequencyCap = V.frequencyCap || 0x1, this.settings.frequencyCapHours = V.frequencyCapHours || 0x18, this.settings.showLink = !!V.showLink, this.minipopmon = !0x1;
             const A = (V.targetId ? document.getElementById(V.targetId) : null) || document;
             this.settings.showLink ? this.linkContainer = A === document ? document.body : A : (this._deployCatchAll(), this.cap.env.f != "desktop" && this.cap.env.o == "ios" && A.addEventListener("touchend", this._onExecute.bind(this), !0x0), A.addEventListener("click", this._onExecute.bind(this), !0x0), this.settings.targetblankhandler && A.addEventListener("mousedown", this._onMouseDownHandler.bind(this), !0x0), this.settings.prepop && window.addEventListener("beforeunload", this._onBeforeUnloadHandler.bind(this), !0x0));
           },
