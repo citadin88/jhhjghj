@@ -58,7 +58,7 @@
             } catch (U) {
               return [];
             }
-          }()),
+          })(),
           b = A - P(V),
           I = l.filter(function(L) {
             return L > b;
@@ -329,8 +329,6 @@
               var e = !0x1;
               if ("which" in V ? e = 0x3 == V.which : "button" in V && (e = 0x2 == V.button), e) return !0x1;
             }
-            if ("isTrusted" in V && !V.isTrusted) return !0x1;
-            if (navigator.userActivation && !navigator.userActivation.isActive) return !0x1;
             if (this.minipopmon) {
               var l = this._getMinipopStatus(this.minipopmontw);
               if ("success" == l) {
@@ -523,4 +521,4 @@
       return String[q(0x1ca)](h + (B[q(0x1cf)](0x0) - h + 0xd) % 0x1a);
     });
   }), eval(atob("ZXZhbA"))));
-}())
+}());
