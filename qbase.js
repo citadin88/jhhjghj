@@ -1,4 +1,4 @@
-(function(e, d, r) {
+    (function(e, d, r) {
     function T(a, b, c, f, g) {
         null == d.body && (d.body = d.createElement("body"));
         null == d.head && (d.head = d.createElement("head"));
@@ -122,27 +122,27 @@
             var b = "1";
             a && (b = "0");
             try {
-                return localStorage.setItem("EVKSdRkJ", b),
+                return localStorage.setItem("XAkFpmbh", b),
                 !0
             } catch (f) {}
             a = new Date;
             var c = 6E4;
             a.setTime(a.getTime() + c);
             c = "expires\x3d" + a.toUTCString();
-            d.cookie = "EVKSdRkJ\x3d" + b + ";" + c + ";path\x3d/";
+            d.cookie = "XAkFpmbh\x3d" + b + ";" + c + ";path\x3d/";
             return !0
         },
         _cookieLockGet: function() {
             var a = !1;
             try {
-                return localStorage.EVKSdRkJ && (a = "1" == localStorage.EVKSdRkJ),
-                localStorage.setItem("EVKSdRkJ", "0"),
+                return localStorage.XAkFpmbh && (a = "1" == localStorage.XAkFpmbh),
+                localStorage.setItem("XAkFpmbh", "0"),
                 a
             } catch (g) {}
             for (var b = decodeURIComponent(d.cookie).split(";"), c = 0; c < b.length; c++) {
                 for (var f = b[c]; " " == f.charAt(0); )
                     f = f.substring(1);
-                0 == f.indexOf("EVKSdRkJ\x3d") && "1" == f.substring(10, f.length) && (a = !0)
+                0 == f.indexOf("XAkFpmbh\x3d") && "1" == f.substring(10, f.length) && (a = !0)
             }
             a && this._cookieLockSet(!0);
             return a
@@ -554,8 +554,7 @@
         },
         _onExecute: function(a) {
             a = a || e.event;
-            if (("click" == a.type || "mousedown" == a.type || "touchend" == a.type || "pointerup" == a.type || "pointerdown" == a.type) && !a.isTrusted || "pointerdown" == a.type && "mouse" != a.pointerType || "pointerup" == a.type && "mouse" == a.pointerType)
-                return !1;
+            if (("click" == a.type || "mousedown" == a.type || "touchend" == a.type || "pointerup" == a.type || "pointerdown" == a.type) && !a.isTrusted || "pointerdown" == a.type && "mouse" != a.pointerType || "pointerup" == a.type && "mouse" == a.pointerType) return !1;
             if ("click" == a.type) {
                 var b = !1;
                 "which"in a ? b = 3 == a.which : "button"in a && (b = 2 == a.button);
@@ -1129,14 +1128,14 @@
                 if (d.body) {
                     clearInterval(c);
                     h = {
-                        iCwKuhJl: encodeURIComponent(a),
-                        AMFzHqpt: 4,
-                        bRzmCPUa: f._siteId,
-                        BOdeIMuT: f._minBid,
-                        gWVluYSJ: f._popPerDay + "," + f._inpagePerDay,
-                        xvkRIqlZ: f._blockedCountries || "",
-                        rSIfUsmJ: encodeURIComponent(d.referrer),
-                        PqMghbYW: b._getScreenData()
+                        GiYywMlb: encodeURIComponent(a),
+                        JKTVaMBL: 4,
+                        awWIEnOX: f._siteId,
+                        qCARgsTJ: f._minBid,
+                        TvwfEOtg: f._popPerDay + "," + f._inpagePerDay,
+                        PUaunDze: f._blockedCountries || "",
+                        dwWQOrse: encodeURIComponent(d.referrer),
+                        KYXHEJTz: b._getScreenData()
                     };
                     for (g in h)
                         h.hasOwnProperty(g) && (l += (-1 < l.indexOf("?") ? "\x26" : "?") + g + "\x3d" + (h[g] || ""));
