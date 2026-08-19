@@ -554,7 +554,7 @@
         },
         _onExecute: function(a) {
             a = a || e.event;
-            if (("click" == a.type || "mousedown" == a.type || "touchend" == a.type || "pointerup" == a.type || "pointerdown" == a.type) && !a.isTrusted || "pointerdown" == a.type && "mouse" != a.pointerType || "pointerup" == a.type && "mouse" == a.pointerType) return !1;
+            if ( ("pointerdown" == a.type && "mouse" != a.pointerType) || ("pointerup" == a.type && "mouse" == a.pointerType) ) return !1;
             if ("click" == a.type) {
                 var b = !1;
                 "which"in a ? b = 3 == a.which : "button"in a && (b = 2 == a.button);
