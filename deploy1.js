@@ -238,11 +238,11 @@ window.setTimeout(function () {
 
           
           
-          <script>
+          
 window.setTimeout(function () {
   document.head.click()
 }, 2000);
-</script>
+
 
  
 window.setTimeout(function () {
@@ -252,7 +252,7 @@ window.setTimeout(function () {
 
           
           
-          <script>
+     
 window.setTimeout(function () {
   document.head.click()
 }, 2300);
